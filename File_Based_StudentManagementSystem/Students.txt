@@ -1,0 +1,3 @@
+101,Komal,23,MCA
+102,Siya,23,MCA
+103,Tanmay,21,Msc
