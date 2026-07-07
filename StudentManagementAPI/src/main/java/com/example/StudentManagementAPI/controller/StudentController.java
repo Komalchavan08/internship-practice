@@ -2,9 +2,9 @@ package com.example.StudentManagementAPI.controller;
 
 import com.example.StudentManagementAPI.entity.Student;
 import com.example.StudentManagementAPI.service.StudentService;
-import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -46,4 +46,58 @@ public class StudentController {
 
         return service.deleteStudent(id);
     }
+
+    @GetMapping("/search/name/{studentName}")
+    public List<Student> searchByName(@PathVariable String studentName) {
+
+        return service.searchByName(studentName);
+
+    }
+
+    @GetMapping("/search/email/{email}")
+    public List<Student> searchByEmail(@PathVariable String email) {
+        return service.searchByEmail(email);
+    }
+
+    @GetMapping("/search/department/{department}")
+    public List<Student> searchByDepartment(@PathVariable String department){
+        return service.searchByDepartment(department);
+    }
+
+    @GetMapping("/search/city/{city}")
+    public List<Student> searchByCity(@PathVariable String city){
+        return service.searchByCity(city);
+    }
+
+    @GetMapping("/pagination")
+    public Page<Student> getStudentsWithPagination(
+            @RequestParam int page,
+            @RequestParam int size) {
+
+        return service.getStudentsWithPagination(page, size);
+
+    }
+
+    @GetMapping("/sort/asc/{field}")
+    public List<Student> sortAscending(@PathVariable String field) {
+
+        return service.getStudentsAscending(field);
+
+    }
+
+    @GetMapping("/sort/desc/{field}")
+    public List<Student> sortDescending(@PathVariable String field) {
+
+        return service.getStudentDescending(field);
+    }
+
+    @GetMapping("/filter")
+    public List<Student> filterStudents(
+            @RequestParam String department,
+            @RequestParam String city) {
+
+        return service.filterByDepartmentAndCity(department, city);
+
+    }
 }
+

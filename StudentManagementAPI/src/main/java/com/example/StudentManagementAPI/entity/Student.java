@@ -1,7 +1,7 @@
 package com.example.StudentManagementAPI.entity;
 
 import jakarta.persistence.*;
-import org.springframework.web.bind.annotation.RestController;
+
 
 @Entity
 @Table(name = "student")
@@ -12,19 +12,57 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private int studentId;
+
     private String studentName;
+
+    private String email;
+
+    private String department;
+
+    private String city;
+
     private int age;
+
     private String course;
 
     public Student(){
 
     }
 
-    public Student(int studentId, String studentName, int age, String course){
+    public Student(int studentId, String studentName, String email,
+                   String department, String city, int age, String course) {
+
         this.studentId = studentId;
         this.studentName = studentName;
+        this.email = email;
+        this.department = department;
+        this.city = city;
         this.age = age;
         this.course = course;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public int getStudentId(){
