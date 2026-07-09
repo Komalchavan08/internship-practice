@@ -17,6 +17,8 @@ public class Student {
 
     private String email;
 
+    private String password;
+
     private String department;
 
     private String city;
@@ -29,12 +31,13 @@ public class Student {
 
     }
 
-    public Student(int studentId, String studentName, String email,
+    public Student(int studentId, String studentName, String email, String password,
                    String department, String city, int age, String course) {
 
         this.studentId = studentId;
         this.studentName = studentName;
         this.email = email;
+        this.password = password;
         this.department = department;
         this.city = city;
         this.age = age;
@@ -48,6 +51,10 @@ public class Student {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
 
     public String getDepartment() {
         return department;

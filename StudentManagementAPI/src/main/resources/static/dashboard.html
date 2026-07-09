@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Welcome</h2>
+
+    <p>Student Management System</p>
+
+    <button onclick="logout()">
+        Logout
+    </button>
+
+</div>
+
+<script>
+
+    if(localStorage.getItem("loggedIn")!=="true"){
+
+    window.location.href="login.html";
+
+}
+
+    function logout(){
+
+    fetch("http://localhost:8081/students/logout",{
+
+        method:"POST"
+
+    })
+
+    .then(response=>response.text())
+
+    .then(data=>{
+
+        localStorage.removeItem("loggedIn");
+
+        alert(data);
+
+        window.location.href="login.html";
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>

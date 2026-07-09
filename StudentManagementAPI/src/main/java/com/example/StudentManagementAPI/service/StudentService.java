@@ -119,4 +119,35 @@ public class StudentService {
 
     }
 
+    public String signUp(Student student) {
+
+        if (repository.existsByEmail(student.getEmail())) {
+            return "Email already exists!";
+        }
+
+        repository.save(student);
+        return "Student Registered Successfully";
+    }
+
+    public String login(String email, String password) {
+
+        Optional<Student> student = repository.findStudentByEmail(email);
+
+        if (student.isPresent()) {
+
+            if (student.get().getPassword().equals(password)) {
+                return "Login Successful";
+            } else {
+                return "Incorrect Password";
+            }
+
+        }
+
+        return "Email Not Found";
+    }
+
+    public String logout(){
+        return "Logout successful";
+    }
+
 }

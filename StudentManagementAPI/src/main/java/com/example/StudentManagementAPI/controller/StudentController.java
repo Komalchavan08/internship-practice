@@ -3,6 +3,7 @@ package com.example.StudentManagementAPI.controller;
 import com.example.StudentManagementAPI.entity.Student;
 import com.example.StudentManagementAPI.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 
@@ -99,5 +100,25 @@ public class StudentController {
         return service.filterByDepartmentAndCity(department, city);
 
     }
+
+    @PostMapping("/signup")
+    public String signUp(@RequestBody Student student) {
+
+        return service.signUp(student);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody Student student){
+
+        return service.login(student.getEmail(), student.getPassword());
+
+    }
+
+
+    @PostMapping("/logout")
+    public  String logout(){
+        return service.logout();
+    }
+
 }
 
