@@ -7,7 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
 
 @RestController
 @RequestMapping("/students")
@@ -18,34 +28,52 @@ public class StudentController {
     private StudentService service;
 
     @PostMapping
-    public Student addStudent(@RequestBody Student student){
-        return service.addStudent(student);
+    public ResponseEntity<Student> addStudent(@Valid @RequestBody Student student){
+
+        Student savedStudent = service.addStudent(student);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(savedStudent);
     }
 
     @GetMapping
-    public List<Student> getAllStudents() {
-        return service.getAllStudents();
+    public ResponseEntity<List<Student>> getAllStudents(){
+
+        return ResponseEntity.ok(service.getAllStudents());
+
     }
 
     // Get Student By ID
     @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable int id) {
-        return service.getStudentById(id);
+    public ResponseEntity<Student> getStudentById(@PathVariable int id){
+
+        return ResponseEntity.ok(service.getStudentById(id));
+
     }
 
     // Update Student
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable int id,
-                                 @RequestBody Student student) {
+    public ResponseEntity<Student> updateStudent(@PathVariable int id,
+                                                 @Valid @RequestBody Student student){
 
-        return service.updateStudent(id, student);
+        Student updatedStudent = service.updateStudent(id,student);
+
+        return ResponseEntity.ok(updatedStudent);
+
     }
 
     // Delete Student
     @DeleteMapping("/{id}")
-    public String deleteStudent(@PathVariable int id) {
+    public ResponseEntity<Map<String,String>> deleteStudent(@PathVariable int id){
 
-        return service.deleteStudent(id);
+        service.deleteStudent(id);
+
+        Map<String,String> response = new HashMap<>();
+
+        response.put("message","Student Deleted Successfully");
+
+        return ResponseEntity.ok(response);
+
     }
 
     @GetMapping("/search/name/{studentName}")
@@ -102,22 +130,44 @@ public class StudentController {
     }
 
     @PostMapping("/signup")
-    public String signUp(@RequestBody Student student) {
+    public ResponseEntity<Map<String, Object>> signUp(@Valid @RequestBody Student student){
 
-        return service.signUp(student);
+        String message = service.signUp(student);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", HttpStatus.CREATED.value());
+        response.put("message", message);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Student student){
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Student student){
 
-        return service.login(student.getEmail(), student.getPassword());
+        String message = service.login(student.getEmail(), student.getPassword());
 
+        Map<String,Object> response = new HashMap<>();
+
+        response.put("status", HttpStatus.OK.value());
+        response.put("message", message);
+
+        return ResponseEntity.ok(response);
     }
 
-
     @PostMapping("/logout")
-    public  String logout(){
-        return service.logout();
+    public ResponseEntity<Map<String,Object>> logout(){
+
+        String message = service.logout();
+
+        Map<String,Object> response = new HashMap<>();
+
+        response.put("status", HttpStatus.OK.value());
+        response.put("message", message);
+
+        return ResponseEntity.ok(response);
+
     }
 
 }

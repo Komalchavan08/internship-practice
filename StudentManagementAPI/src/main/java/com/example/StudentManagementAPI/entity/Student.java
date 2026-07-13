@@ -2,6 +2,12 @@ package com.example.StudentManagementAPI.entity;
 
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 
 @Entity
 @Table(name = "student")
@@ -13,18 +19,28 @@ public class Student {
 
     private int studentId;
 
+    @NotBlank(message = "Student Name is required")
     private String studentName;
 
+    @NotBlank(message = "Email is required")
+    @Email(message = "Enter a valid email")
     private String email;
 
+    @NotBlank(message = "Password is required")
+    @Size(min = 5, message = "Password must be at least 5 characters")
     private String password;
 
+    @NotBlank(message = "Department is required")
     private String department;
 
+    @NotBlank(message = "City is required")
     private String city;
 
+    @Min(value = 18, message = "Age should be at least 18")
+    @Max(value = 60, message = "Age should not exceed 60")
     private int age;
 
+    @NotBlank(message = "Course is required")
     private String course;
 
     public Student(){
