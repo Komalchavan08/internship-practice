@@ -1,39 +1,81 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-    <title>Student Login</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login · StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="style.css">
-
 </head>
+<body class="auth-body">
 
-<body>
+<div class="auth-container">
 
-<div class="container">
+    <div class="left-panel">
+        <div class="brand-mark">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/><path d="M22 8v6"/></svg>
+            <span>StudentHub</span>
+        </div>
 
-    <h2>Student Login</h2>
+        <h1>Everything about your students, in one dashboard.</h1>
+        <p>Sign in to track registrations, monitor status, and manage records without digging through spreadsheets.</p>
 
-    <input type="email" id="email" placeholder="Email">
+        <div class="brand-preview">
+            <div class="brand-preview-bar"><span></span><span></span><span></span></div>
+            <div class="brand-preview-body">
+                <div class="brand-preview-head">
+                    <span>Dashboard Overview</span>
+                    <span class="brand-preview-live">Live</span>
+                </div>
+                <div class="bp-stats">
+                    <div class="bp-stat" style="--bp-color:#fff"><strong>128</strong><span>Total</span></div>
+                    <div class="bp-stat" style="--bp-color:var(--success)"><strong>104</strong><span>Active</span></div>
+                    <div class="bp-stat" style="--bp-color:var(--warning)"><strong>7</strong><span>Recent</span></div>
+                    <div class="bp-stat" style="--bp-color:var(--danger)"><strong>24</strong><span>Inactive</span></div>
+                </div>
+                <div class="bp-chart">
+                    <div class="bp-bar" style="height:45%"></div>
+                    <div class="bp-bar" style="height:70%"></div>
+                    <div class="bp-bar" style="height:55%"></div>
+                    <div class="bp-bar" style="height:85%"></div>
+                    <div class="bp-bar" style="height:60%"></div>
+                    <div class="bp-bar" style="height:95%"></div>
+                    <div class="bp-bar" style="height:75%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <input type="password" id="password" placeholder="Password">
+    <div class="right-panel">
+        <div class="form-box">
+            <h2>Welcome back</h2>
+            <p>Sign in to continue to your dashboard.</p>
 
-    <button onclick="login()">
-        Login
-    </button>
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="you@example.com">
+            </div>
 
-    <p id="message"></p>
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password">
+            </div>
 
-    <p>
-        Don't have an account?
-        <a href="signup.html">Sign Up</a>
-    </p>
+            <button class="btn btn-primary" onclick="login()">Login</button>
+
+            <p id="message" class="form-message"></p>
+
+            <div class="bottom-link" id="registerLinkWrap">
+                Don't have an account? <a href="signup.html">Register</a>
+            </div>
+        </div>
+    </div>
 
 </div>
 
 <script src="login.js"></script>
-
+<script src="auditHeader.js"></script>
 </body>
-
 </html>

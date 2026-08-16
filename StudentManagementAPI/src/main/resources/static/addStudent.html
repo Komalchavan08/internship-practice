@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student · StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="formPage.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <div class="sidebar">
+        <div class="logo">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/><path d="M22 8v6"/></svg>
+            StudentHub
+        </div>
+        <p class="logo-subtitle">Student Management System</p>
+
+        <ul>
+            <li>
+                <a href="dashboard.html">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="viewStudents.html">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15 14.2c2.6.4 4.5 2.6 4.5 5.3"/></svg>
+                    Students
+                </a>
+            </li>
+            <li>
+                <a href="addStudent.html" class="active">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="10" cy="9" r="3.2"/><path d="M3 20c0-3.4 3.1-6 7-6s7 2.6 7 6"/><path d="M19 8v6"/><path d="M16 11h6"/></svg>
+                    Add Student
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="logout()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1>Add Student</h1>
+                <p>Create a new student record.</p>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <h3>Student details</h3>
+                <p>All fields are required.</p>
+            </div>
+
+            <div class="form-card-body">
+                <div class="field-grid">
+                    <div class="field full">
+                        <label for="studentName">Full name</label>
+                        <input type="text" id="studentName" placeholder="Jane Doe">
+                        <small id="nameError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="you@example.com">
+                        <small id="emailError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="At least 6 characters">
+                        <small id="passwordError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="department">Department</label>
+                        <input type="text" id="department" placeholder="Computer Science">
+                        <small id="departmentError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="city">City</label>
+                        <input type="text" id="city" placeholder="Pune">
+                        <small id="cityError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" placeholder="18 - 60">
+                        <small id="ageError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="course">Course</label>
+                        <input type="text" id="course" placeholder="B.Tech">
+                        <small id="courseError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="mobile">Mobile</label>
+                        <input type="tel" id="mobile" placeholder="10-digit number">
+                        <small id="mobileError" class="field-error"></small>
+                    </div>
+
+                    <div class="field">
+                        <label for="dob">Date of birth</label>
+                        <input type="date" id="dob">
+                        <small id="dobError" class="field-error"></small>
+                    </div>
+
+                    <div class="field full">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" placeholder="City, State">
+                        <small id="addressError" class="field-error"></small>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="registerBtn" class="btn btn-primary" onclick="addStudent()" disabled>Add Student</button>
+                    <a href="viewStudents.html" class="btn btn-ghost">Cancel</a>
+                    <p id="message" class="form-message"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="validation.js"></script>
+<script src="addStudent.js"></script>
+<script src="auditHeader.js"></script>
+
+</body>
+</html>

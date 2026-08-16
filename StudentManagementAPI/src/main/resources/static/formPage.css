@@ -1,0 +1,50 @@
+/* ==========================================================================
+   Add / Edit Student — form card inside the dashboard shell
+   ========================================================================== */
+
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  max-width: 640px;
+  overflow: hidden;
+}
+
+.form-card-header {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+}
+
+.form-card-header h3 {
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.form-card-header p {
+  font-size: 13px;
+}
+
+.form-card-body {
+  padding: 26px 28px 28px;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.form-actions .form-message {
+  flex: 1;
+  text-align: left;
+  min-height: 0;
+}
+
+@media (max-width: 560px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+}

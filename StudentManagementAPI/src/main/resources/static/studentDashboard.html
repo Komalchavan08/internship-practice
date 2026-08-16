@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard · StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <div class="sidebar">
+        <div class="logo">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/><path d="M22 8v6"/></svg>
+            StudentHub
+        </div>
+        <p class="logo-subtitle">Student Portal</p>
+
+        <ul>
+            <li>
+                <a href="studentDashboard.html" class="active">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="logout()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1>Welcome</h1>
+                <p>Your student dashboard.</p>
+            </div>
+        </div>
+
+        <div class="form-card" style="max-width:520px; padding:36px; text-align:center;">
+            <div class="card-icon" style="margin:0 auto 16px;">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+            </div>
+            <h3 style="margin-bottom:8px;">More features coming soon</h3>
+            <p style="font-size:13.5px;">Your profile, grades, and course details will appear here in a future update.</p>
+        </div>
+    </div>
+
+</div>
+
+<script src="auditHeader.js"></script>
+<script src="studentDashboard.js"></script>
+</body>
+</html>

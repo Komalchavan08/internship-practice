@@ -1,7 +1,8 @@
 package com.example.StudentManagementAPI.service;
 
+import com.example.StudentManagementAPI.dto.StudentRequest;
 import com.example.StudentManagementAPI.entity.Student;
-import com.example.StudentManagementAPI.exception.EmailAlreadyExistsException;
+import com.example.StudentManagementAPI.entity.User;
 import com.example.StudentManagementAPI.exception.StudentNotFoundException;
 import com.example.StudentManagementAPI.repository.StudentRepository;
 
@@ -11,9 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -21,17 +22,47 @@ public class StudentService {
     @Autowired
     private StudentRepository repository;
 
-    // Add Student
-    public Student addStudent(Student student) {
-        return repository.save(student);
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AuditLogService auditLogService;
+
+    // Add Student — creates the login identity (User, role=STUDENT) and the
+    // academic profile (Student) together, linked, in one transaction.
+    @Transactional
+    public Student addStudent(StudentRequest request) {
+
+        User user = new User();
+        user.setName(request.getStudentName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setMobile(request.getMobile());
+        user.setDob(request.getDob());
+        user.setAddress(request.getAddress());
+
+        User savedUser = userService.createUserWithRole(user, "STUDENT");
+
+        Student student = new Student();
+        student.setDepartment(request.getDepartment());
+        student.setCity(request.getCity());
+        student.setAge(request.getAge());
+        student.setCourse(request.getCourse());
+        student.setStatus("ACTIVE");
+        student.setUser(savedUser);
+
+        Student saved = repository.save(student);
+
+        auditLogService.log("CREATE", "Student", String.valueOf(saved.getStudentId()),
+                "Added student: " + request.getStudentName());
+
+        return saved;
     }
 
-    // Get All Students
     public List<Student> getAllStudents() {
         return repository.findAll();
     }
 
-    // Get Student By ID
     public Student getStudentById(int id) {
 
         return repository.findById(id)
@@ -39,57 +70,82 @@ public class StudentService {
                         new StudentNotFoundException("Student not found with ID : " + id));
     }
 
-    // Update Student
-    public Student updateStudent(int id, Student student) {
+    public List<Student> getStudentsByStatus(String status){
 
-        Student updateStudent = repository.findById(id)
+        return repository.findByStatus(status);
+
+    }
+
+    // Update Student — updates both the linked User's login info and the
+    // Student's academic fields.
+    @Transactional
+    public Student updateStudent(int id, StudentRequest request) {
+
+        Student existing = repository.findById(id)
                 .orElseThrow(() ->
                         new StudentNotFoundException("Student not found with ID : " + id));
 
-        updateStudent.setStudentName(student.getStudentName());
-        updateStudent.setAge(student.getAge());
-        updateStudent.setCourse(student.getCourse());
-        updateStudent.setDepartment(student.getDepartment());
-        updateStudent.setCity(student.getCity());
-        updateStudent.setEmail(student.getEmail());
-        updateStudent.setPassword(student.getPassword());
+        User user = existing.getUser();
+        user.setName(request.getStudentName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setMobile(request.getMobile());
+        user.setDob(request.getDob());
+        user.setAddress(request.getAddress());
+        userService.updateUser(user);
 
-        return repository.save(updateStudent);
+        existing.setAge(request.getAge());
+        existing.setCourse(request.getCourse());
+        existing.setDepartment(request.getDepartment());
+        existing.setCity(request.getCity());
+
+        Student saved = repository.save(existing);
+
+        auditLogService.log("UPDATE", "Student", String.valueOf(id),
+                "Updated student: " + request.getStudentName());
+
+        return saved;
     }
 
-    // Delete Student
+    // Delete Student — removes the Student profile, then its linked User.
+    @Transactional
     public String deleteStudent(int id) {
 
         Student student = repository.findById(id)
                 .orElseThrow(() ->
                         new StudentNotFoundException("Student not found with ID : " + id));
 
+        User user = student.getUser();
+        String studentName = (user != null) ? user.getName() : ("Student #" + id);
+
         repository.delete(student);
+
+        if (user != null) {
+            userService.deleteUser(user);
+        }
+
+        auditLogService.log("DELETE", "Student", String.valueOf(id),
+                "Deleted student: " + studentName);
 
         return "Student Deleted Successfully";
     }
 
-    // Search By Name
     public List<Student> searchByName(String studentName) {
-        return repository.findByStudentName(studentName);
+        return repository.findByUser_NameContainingIgnoreCase(studentName);
     }
 
-    // Search By Email
     public List<Student> searchByEmail(String email) {
-        return repository.findByEmail(email);
+        return repository.findByUser_Email(email);
     }
 
-    // Search By Department
     public List<Student> searchByDepartment(String department) {
         return repository.findByDepartment(department);
     }
 
-    // Search By City
     public List<Student> searchByCity(String city) {
         return repository.findByCity(city);
     }
 
-    // Pagination
     public Page<Student> getStudentsWithPagination(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
@@ -97,57 +153,51 @@ public class StudentService {
         return repository.findAll(pageable);
     }
 
-    // Sorting Ascending
     public List<Student> getStudentsAscending(String field) {
 
-        return repository.findAll(Sort.by(Sort.Direction.ASC, field));
+        return repository.findAll(Sort.by(Sort.Direction.ASC, resolveSortField(field)));
     }
 
-    // Sorting Descending
     public List<Student> getStudentDescending(String field) {
 
-        return repository.findAll(Sort.by(Sort.Direction.DESC, field));
+        return repository.findAll(Sort.by(Sort.Direction.DESC, resolveSortField(field)));
     }
 
-    // Filter
+    private String resolveSortField(String field) {
+        if ("studentName".equals(field)) {
+            return "user.name";
+        }
+        if ("email".equals(field)) {
+            return "user.email";
+        }
+        return field;
+    }
+
     public List<Student> filterByDepartmentAndCity(String department, String city) {
 
         return repository.findByDepartmentAndCity(department, city);
     }
 
-    // Signup
-    public String signUp(Student student) {
+    public Student activateStudent(int id){
 
-        if (repository.existsByEmail(student.getEmail())) {
-            throw new EmailAlreadyExistsException("Email already exists!");
-        }
+        Student student = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student Not Found"));
 
-        repository.save(student);
+        student.setStatus("ACTIVE");
 
-        return "Student Registered Successfully";
+        return repository.save(student);
+
     }
 
-    // Login
-    public String login(String email, String password) {
+    public Student deactivateStudent(int id){
 
-        Optional<Student> student = repository.findStudentByEmail(email);
+        Student student = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student Not Found"));
 
-        if (student.isPresent()) {
+        student.setStatus("INACTIVE");
 
-            if (student.get().getPassword().equals(password)) {
-                return "Login Successful";
-            } else {
-                return "Incorrect Password";
-            }
+        return repository.save(student);
 
-        }
-
-        return "Email Not Found";
-    }
-
-    // Logout
-    public String logout() {
-        return "Logout Successful";
     }
 
 }

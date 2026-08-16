@@ -1,9 +1,9 @@
 package com.example.StudentManagementAPI.controller;
 
+import com.example.StudentManagementAPI.dto.StudentRequest;
 import com.example.StudentManagementAPI.entity.Student;
 import com.example.StudentManagementAPI.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 
@@ -28,12 +28,18 @@ public class StudentController {
     private StudentService service;
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@Valid @RequestBody Student student){
+    public ResponseEntity<Map<String, Object>> addStudent(@Valid @RequestBody StudentRequest request) {
 
-        Student savedStudent = service.addStudent(student);
+        Student savedStudent = service.addStudent(request);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("status", HttpStatus.CREATED.value());
+        response.put("message", "Student Added Successfully");
+        response.put("student", savedStudent);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(savedStudent);
+                .body(response);
     }
 
     @GetMapping
@@ -51,14 +57,29 @@ public class StudentController {
 
     }
 
+
     // Update Student
     @PutMapping("/{id}")
     public ResponseEntity<Student> updateStudent(@PathVariable int id,
-                                                 @Valid @RequestBody Student student){
+                                                 @Valid @RequestBody StudentRequest request){
 
-        Student updatedStudent = service.updateStudent(id,student);
+        Student updatedStudent = service.updateStudent(id, request);
 
         return ResponseEntity.ok(updatedStudent);
+
+    }
+
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<Student> activateStudent(@PathVariable int id){
+
+        return ResponseEntity.ok(service.activateStudent(id));
+
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Student> deactivateStudent(@PathVariable int id){
+
+        return ResponseEntity.ok(service.deactivateStudent(id));
 
     }
 
@@ -129,46 +150,11 @@ public class StudentController {
 
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<Map<String, Object>> signUp(@Valid @RequestBody Student student){
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Student>> getStudentsByStatus(@PathVariable String status){
 
-        String message = service.signUp(student);
-
-        Map<String, Object> response = new HashMap<>();
-
-        response.put("status", HttpStatus.CREATED.value());
-        response.put("message", message);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Student student){
-
-        String message = service.login(student.getEmail(), student.getPassword());
-
-        Map<String,Object> response = new HashMap<>();
-
-        response.put("status", HttpStatus.OK.value());
-        response.put("message", message);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Map<String,Object>> logout(){
-
-        String message = service.logout();
-
-        Map<String,Object> response = new HashMap<>();
-
-        response.put("status", HttpStatus.OK.value());
-        response.put("message", message);
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(service.getStudentsByStatus(status));
 
     }
 
 }
-

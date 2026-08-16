@@ -6,19 +6,23 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import java.util.Optional;
-
 @Repository
-public interface StudentRepository extends JpaRepository<Student, Integer>{
+public interface StudentRepository extends JpaRepository<Student, Integer> {
 
-    List<Student> findByStudentName(String studentName);
-    List<Student> findByEmail(String email);
+    // Name and email now live on the linked User, not on Student directly.
+    List<Student> findByUser_NameContainingIgnoreCase(String name);
+
+    List<Student> findByUser_Email(String email);
+
     List<Student> findByDepartment(String department);
+
+    List<Student> findByStatus(String status);
+
+    long countByStatus(String status);
+
     List<Student> findByCity(String city);
 
     List<Student> findByDepartmentAndCity(String department, String city);
 
-    Optional<Student> findStudentByEmail(String email);
-
-    boolean existsByEmail(String email);
+    java.util.Optional<Student> findByUser_UserId(int userId);
 }

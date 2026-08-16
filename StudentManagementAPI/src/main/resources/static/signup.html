@@ -1,54 +1,119 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-    <title>Student Signup</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration · StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
     <link rel="stylesheet" href="style.css">
-
 </head>
+<body class="auth-body">
 
-<body>
+<div class="auth-container">
 
-<div class="container">
+    <div class="left-panel">
+        <div class="brand-mark">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/><path d="M22 8v6"/></svg>
+            <span>StudentHub</span>
+        </div>
 
-    <h2>Student Signup</h2>
+        <h1>Set up your workspace in under a minute.</h1>
+        <p>Create the admin account to start managing student records.</p>
 
-    <input type="text" id="studentName" placeholder="Student Name">
+        <div class="brand-preview">
+            <div class="brand-preview-bar"><span></span><span></span><span></span></div>
+            <div class="brand-preview-body">
+                <div class="brand-preview-head">
+                    <span>Dashboard Overview</span>
+                    <span class="brand-preview-live">Live</span>
+                </div>
+                <div class="bp-stats">
+                    <div class="bp-stat" style="--bp-color:#fff"><strong>128</strong><span>Total</span></div>
+                    <div class="bp-stat" style="--bp-color:var(--success)"><strong>104</strong><span>Active</span></div>
+                    <div class="bp-stat" style="--bp-color:var(--warning)"><strong>7</strong><span>Recent</span></div>
+                    <div class="bp-stat" style="--bp-color:var(--danger)"><strong>24</strong><span>Inactive</span></div>
+                </div>
+                <div class="bp-chart">
+                    <div class="bp-bar" style="height:45%"></div>
+                    <div class="bp-bar" style="height:70%"></div>
+                    <div class="bp-bar" style="height:55%"></div>
+                    <div class="bp-bar" style="height:85%"></div>
+                    <div class="bp-bar" style="height:60%"></div>
+                    <div class="bp-bar" style="height:95%"></div>
+                    <div class="bp-bar" style="height:75%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <input type="email" id="email" placeholder="Email">
+    <div class="right-panel">
+        <div class="form-box">
+            <h2>Registration</h2>
+            <p>This one-time setup creates your admin account.</p>
 
-    <input type="password" id="password" placeholder="Password">
+            <div class="field-grid">
+                <div class="field full">
+                    <label for="fullName">Full name</label>
+                    <input type="text" id="fullName" placeholder="Jane Doe">
+                    <small id="nameError" class="field-error"></small>
+                </div>
 
-    <input type="text" id="department" placeholder="Department">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="you@example.com">
+                    <small id="emailError" class="field-error"></small>
+                </div>
 
-    <input type="text" id="city" placeholder="City">
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="At least 6 characters">
+                    <small id="passwordError" class="field-error"></small>
+                </div>
 
-    <input type="number" id="age" placeholder="Age">
+                <div class="field">
+                    <label for="mobile">Mobile</label>
+                    <input type="tel" id="mobile" placeholder="10-digit number">
+                    <small id="mobileError" class="field-error"></small>
+                </div>
 
-    <input type="text" id="course" placeholder="Course">
+                <div class="field">
+                    <label for="dob">Date of birth</label>
+                    <input type="date" id="dob">
+                    <small id="dobError" class="field-error"></small>
+                </div>
 
-    <button onclick="signup()">
-        Sign Up
-    </button>
+                <div class="field full">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" placeholder="City, State">
+                    <small id="addressError" class="field-error"></small>
+                </div>
 
-    <p id="message"></p>
+                <div class="field full">
+                    <label for="role">Role</label>
+                    <select id="role">
+                        <option value="ADMIN" selected>Admin</option>
+                        <option value="STUDENT" disabled title="Students are added by an admin">Student (added by Admin only)</option>
+                    </select>
+                </div>
+            </div>
 
-    <p>
+            <button id="registerBtn" class="btn btn-primary" onclick="signup()" disabled>Register</button>
 
-        Already have an account?
+            <p id="message" class="form-message"></p>
 
-        <a href="login.html">
-            Login
-        </a>
-
-    </p>
+            <div class="bottom-link">
+                Already have an account? <a href="login.html">Login</a>
+            </div>
+        </div>
+    </div>
 
 </div>
 
+<script src="validation.js"></script>
 <script src="signup.js"></script>
+<script src="auditHeader.js"></script>
 
 </body>
-
 </html>

@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Activity Logs — action badges + filter row
+   ========================================================================== */
+
+.action-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.action-login,
+.action-logout {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.action-registration,
+.action-create {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.action-update,
+.action-password_change {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.action-delete {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.logs-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.logs-toolbar .field {
+  margin-bottom: 0;
+  min-width: 150px;
+}
+
+.logs-toolbar .field label {
+  font-size: 11.5px;
+  margin-bottom: 4px;
+}
+
+.logs-toolbar .field input,
+.logs-toolbar .field select {
+  padding: 9px 12px;
+  font-size: 13.5px;
+}
+
+.logs-toolbar-actions {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.description-cell {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

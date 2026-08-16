@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Logs · StudentHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="viewStudents.css">
+    <link rel="stylesheet" href="activityLogs.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <div class="sidebar">
+        <div class="logo">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/><path d="M22 8v6"/></svg>
+            StudentHub
+        </div>
+        <p class="logo-subtitle">Student Management System</p>
+
+        <ul>
+            <li>
+                <a href="dashboard.html">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="viewStudents.html">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="8" r="2.4"/><path d="M15 14.2c2.6.4 4.5 2.6 4.5 5.3"/></svg>
+                    Students
+                </a>
+            </li>
+            <li>
+                <a href="addStudent.html">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="10" cy="9" r="3.2"/><path d="M3 20c0-3.4 3.1-6 7-6s7 2.6 7 6"/><path d="M19 8v6"/><path d="M16 11h6"/></svg>
+                    Add Student
+                </a>
+            </li>
+            <li>
+                <a href="activityLogs.html" class="active">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16v4H4z"/><path d="M4 12h16"/><path d="M4 12v8h16v-8"/></svg>
+                    Activity Logs
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    Profile
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="logout()">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1>Activity Logs</h1>
+                <p>Every login, registration, and record change, in one place.</p>
+            </div>
+        </div>
+
+        <div class="logs-toolbar">
+            <div class="field">
+                <label for="actionFilter">Action</label>
+                <select id="actionFilter">
+                    <option value="">All actions</option>
+                    <option value="LOGIN">Login</option>
+                    <option value="LOGOUT">Logout</option>
+                    <option value="REGISTRATION">Registration</option>
+                    <option value="CREATE">Create</option>
+                    <option value="UPDATE">Update</option>
+                    <option value="DELETE">Delete</option>
+                    <option value="PASSWORD_CHANGE">Password Change</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="entityTypeFilter">Entity type</label>
+                <select id="entityTypeFilter">
+                    <option value="">All types</option>
+                    <option value="User">User</option>
+                    <option value="Student">Student</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="performedByFilter">Performed by</label>
+                <input type="text" id="performedByFilter" placeholder="email contains...">
+            </div>
+
+            <div class="field">
+                <label for="fromDate">From</label>
+                <input type="date" id="fromDate">
+            </div>
+
+            <div class="field">
+                <label for="toDate">To</label>
+                <input type="date" id="toDate">
+            </div>
+
+            <div class="logs-toolbar-actions">
+                <button class="btn btn-ghost" onclick="resetFilters()">Reset</button>
+                <button class="btn btn-primary" onclick="applyFilters()">Apply</button>
+                <button class="btn btn-ghost" onclick="exportCsv()">
+                    <svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+                    Export CSV
+                </button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Action</th>
+                    <th>Performed By</th>
+                    <th>Entity Type</th>
+                    <th>Entity ID</th>
+                    <th>Description</th>
+                    <th>Timestamp</th>
+                </tr>
+                </thead>
+                <tbody id="logsTable"></tbody>
+            </table>
+        </div>
+
+        <div id="pagination" class="pagination"></div>
+    </div>
+
+</div>
+
+<script src="auditHeader.js"></script>
+<script src="activityLogs.js"></script>
+</body>
+</html>
