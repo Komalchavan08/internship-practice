@@ -1,8 +1,10 @@
 package com.example.StudentManagementAPI.controller;
 
 import com.example.StudentManagementAPI.dto.ChangePasswordRequest;
+import com.example.StudentManagementAPI.dto.ForgotPasswordRequest;
 import com.example.StudentManagementAPI.dto.ProfileResponse;
 import com.example.StudentManagementAPI.dto.ProfileUpdateRequest;
+import com.example.StudentManagementAPI.dto.ResetPasswordRequest;
 import com.example.StudentManagementAPI.entity.User;
 import com.example.StudentManagementAPI.service.UserService;
 
@@ -104,7 +106,7 @@ public class UserController {
         return ResponseEntity.ok(service.uploadProfilePhoto(id, file));
     }
 
-    // Change Password
+    // Change Password (while logged in — knows current password)
     @PutMapping("/profile/{id}/change-password")
     public ResponseEntity<Map<String, Object>> changePassword(@PathVariable int id,
                                                               @Valid @RequestBody ChangePasswordRequest request) {
@@ -113,7 +115,33 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.OK.value());
-        response.put("message", "Password changed successfully");
+        response.put("message", "Password changed successfully.");
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Forgot Password — sends a one-time OTP to the account's email
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, Object>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
+
+        service.forgotPassword(request);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.OK.value());
+        response.put("message", "An OTP has been sent to your email.");
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Reset Password — verifies the OTP and sets the new password
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, Object>> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+
+        service.resetPassword(request);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.OK.value());
+        response.put("message", "Password reset successfully. You can now log in.");
 
         return ResponseEntity.ok(response);
     }

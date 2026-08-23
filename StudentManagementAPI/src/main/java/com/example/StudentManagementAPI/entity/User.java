@@ -34,6 +34,11 @@ public class User extends Auditable {
 
     private String profilePhoto;
 
+    // Forgot Password — one-time code + expiry, cleared once used or replaced
+    private String otpCode;
+
+    private java.time.LocalDateTime otpExpiryTime;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -118,6 +123,22 @@ public class User extends Auditable {
 
     public void setProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;
+    }
+
+    public String getOtpCode() {
+        return otpCode;
+    }
+
+    public void setOtpCode(String otpCode) {
+        this.otpCode = otpCode;
+    }
+
+    public java.time.LocalDateTime getOtpExpiryTime() {
+        return otpExpiryTime;
+    }
+
+    public void setOtpExpiryTime(java.time.LocalDateTime otpExpiryTime) {
+        this.otpExpiryTime = otpExpiryTime;
     }
 
     public Role getRole() {

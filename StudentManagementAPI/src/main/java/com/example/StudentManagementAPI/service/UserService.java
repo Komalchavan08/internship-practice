@@ -1,7 +1,9 @@
 package com.example.StudentManagementAPI.service;
 
+import com.example.StudentManagementAPI.dto.ForgotPasswordRequest;
 import com.example.StudentManagementAPI.dto.ProfileResponse;
 import com.example.StudentManagementAPI.dto.ProfileUpdateRequest;
+import com.example.StudentManagementAPI.dto.ResetPasswordRequest;
 import com.example.StudentManagementAPI.entity.Role;
 import com.example.StudentManagementAPI.entity.User;
 import com.example.StudentManagementAPI.exception.AdminAlreadyExistsException;
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +39,9 @@ public class UserService {
 
     @Autowired
     private AuditLogService auditLogService;
+
+    @Autowired
+    private EmailService emailService;
 
     // Registration — public "Registration" page. Defaults to ADMIN (matches
     // the form's default selection) and only ever allows one admin to be
@@ -231,5 +238,57 @@ public class UserService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to store profile photo: " + e.getMessage());
         }
+    }
+
+    // Forgot Password — generates a 6-digit OTP, stores it (10-minute
+    // expiry), and emails it to the account's own address.
+    public void forgotPassword(ForgotPasswordRequest request) {
+
+        User user = repository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("No account found with this email."));
+
+        String otp = generateOtp();
+
+        user.setOtpCode(otp);
+        user.setOtpExpiryTime(LocalDateTime.now().plusMinutes(10));
+
+        repository.save(user);
+
+        emailService.sendOtpEmail(user.getEmail(), otp);
+    }
+
+    // Reset Password — verifies the OTP matches and hasn't expired, then
+    // sets the new password and invalidates the OTP so it can't be reused.
+    public void resetPassword(ResetPasswordRequest request) {
+
+        User user = repository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("No account found with this email."));
+
+        if (user.getOtpCode() == null || user.getOtpExpiryTime() == null) {
+            throw new IllegalArgumentException("No OTP was requested for this account.");
+        }
+
+        if (!user.getOtpCode().equals(request.getOtp())) {
+            throw new IllegalArgumentException("Incorrect OTP.");
+        }
+
+        if (LocalDateTime.now().isAfter(user.getOtpExpiryTime())) {
+            throw new IllegalArgumentException("This OTP has expired. Please request a new one.");
+        }
+
+        user.setPassword(request.getNewPassword());
+        user.setOtpCode(null);
+        user.setOtpExpiryTime(null);
+
+        repository.save(user);
+
+        auditLogService.log("PASSWORD_CHANGE", "User", String.valueOf(user.getUserId()),
+                "Password reset via OTP for: " + user.getEmail());
+    }
+
+    private String generateOtp() {
+        SecureRandom random = new SecureRandom();
+        int otp = 100000 + random.nextInt(900000);
+        return String.valueOf(otp);
     }
 }

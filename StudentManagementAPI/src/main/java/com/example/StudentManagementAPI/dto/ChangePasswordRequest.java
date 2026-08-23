@@ -9,7 +9,7 @@ public class ChangePasswordRequest {
     private String currentPassword;
 
     @NotBlank(message = "New password is required")
-    @Size(min = 5, message = "New password must be at least 5 characters")
+    @Size(min = 5, message = "Password must be at least 5 characters")
     private String newPassword;
 
     public String getCurrentPassword() {
