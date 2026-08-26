@@ -29,7 +29,10 @@ public class Clause {
     @Column(nullable = false, length = 255)
     private String clauseTitle;
 
-    @Lob
+    // NOTE: deliberately NOT using @Lob here - combined with PostgreSQL,
+    // @Lob makes Hibernate treat this as a live stream that can fail with
+    // "Unable to access lob stream" once the transaction closes.
+    // columnDefinition = "TEXT" alone is enough for long text in Postgres.
     @Column(nullable = false, columnDefinition = "TEXT")
     private String clauseText;
 

@@ -33,11 +33,10 @@ public class Modification {
     @JoinColumn(name = "clause_id")
     private Clause clause;
 
-    @Lob
+    // See Clause.java for why @Lob is deliberately avoided here with PostgreSQL
     @Column(columnDefinition = "TEXT")
     private String oldValue;
 
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String newValue;
 
