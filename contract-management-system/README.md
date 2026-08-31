@@ -53,9 +53,9 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-The app starts on **http://localhost:8080**
+The app starts on **http://localhost:8081**
 
-Swagger UI (API docs): **http://localhost:8080/swagger-ui.html**
+Swagger UI (API docs): **http://localhost:8081/swagger-ui.html**
 
 ## Status
 - [x] Project setup & folder structure
