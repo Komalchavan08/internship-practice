@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard · Contract Management System</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+
+<div class="dash-shell">
+    <header class="dash-header">
+        <div class="brand">Case<span>File</span> — Contract Management System</div>
+        <div class="user-cluster">
+            <div>
+                <span class="user-name" id="userNameLabel"></span>
+                <span id="roleStamps"></span>
+            </div>
+            <button class="btn-logout" id="logoutBtn">Log Out</button>
+        </div>
+    </header>
+
+    <main class="dash-body">
+        <p class="dash-eyebrow" id="todayLabel"></p>
+        <h1 class="dash-title">Dashboard</h1>
+
+        <!-- Role-based navigation: cards are added here by dashboard.js
+             depending on which roles the logged-in user actually has -->
+        <div class="nav-grid" id="navGrid"></div>
+
+        <div class="results-panel">
+            <h3 id="resultsTitle">Select a section above</h3>
+            <div id="resultsBody">
+                <p class="empty-note">Nothing loaded yet — click one of the cards above.</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="/js/auth.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

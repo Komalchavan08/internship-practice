@@ -7,6 +7,7 @@ import com.internship.contractmanagement.entity.User;
 import com.internship.contractmanagement.exception.ResourceNotFoundException;
 import com.internship.contractmanagement.repository.RoleRepository;
 import com.internship.contractmanagement.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -26,10 +27,12 @@ public class UserService {
     // it creates a UserService - we never write "new UserRepository()" ourselves.
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // ---------- CREATE ----------
@@ -38,9 +41,11 @@ public class UserService {
         user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
 
-        // NOTE: storing plain text for now on purpose - password hashing
-        // (BCrypt) gets wired in properly during the Authentication task.
-        user.setPassword(request.getPassword());
+        // BCrypt-hash the password before it ever touches the database.
+        // encode() is one-way - there's no way to reverse a hash back into
+        // the original password, even for us. Login works by hashing the
+        // SUBMITTED password and comparing hashes, never by decrypting.
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         // If the client sent roleIds, look up each Role and attach it
         if (request.getRoleIds() != null && !request.getRoleIds().isEmpty()) {
